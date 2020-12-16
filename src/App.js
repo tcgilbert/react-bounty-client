@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import EditForm from './pages/EditForm';
@@ -11,6 +11,24 @@ import './App.css';
 
 
 class App extends Component {
+
+  constructor() {
+    super()
+
+    this.state = {
+      bounties: []
+    }
+  }
+
+
+  async componentDidMount() {
+    const response = await fetch('http://localhost:3001/bounties');
+    const data = await response.json();
+    console.log(data.bounties);
+    this.setState({ bounties: data.bounties })
+  }
+
+
   render() {
     return(
       <div className="App">
@@ -18,7 +36,7 @@ class App extends Component {
         <Nav />
 
         <Route exact path="/">
-          <Home />
+          <Home bounties={this.state.bounties}/>
         </Route>
 
         <Route path="/show/:id">
